@@ -1,6 +1,9 @@
 var Web3 = require("web3");
 var axios = require('axios');
 
+var web3 = new Web3(new Web3.providers.HttpProvider('https://api.avax-test.network/ext/bc/C/rpc'));
+console.log(web3);
+
 const getTokenID = (ipfsLink) => {
   const parts = ipfsLink.split("/");
   if (parts.length > 3) {
@@ -12,19 +15,19 @@ const getTokenID = (ipfsLink) => {
 };
 
 export const getNft = async () => {
-  if (window.ethereum) {
-    window.web3 = new Web3(window.ethereum);
-    window.ethereum.enable();
-  } else if (window.web3) {
-    window.web3 = new Web3(window.web3.currentProvider);
-  } else {
-    window.alert(
-      "Non-Ethereum browser detected. You should consider trying MetaMask!"
-    );
-  }
-  var web3 = window.web3;
-
+  // if (window.ethereum) {
+  //   window.web3 = new Web3(window.ethereum);
+  //   window.ethereum.enable();
+  // } else if (window.web3) {
+  //   window.web3 = new Web3(window.web3.currentProvider);
+  // } else {
+  //   window.alert(
+  //     "Non-Ethereum browser detected. You should consider trying MetaMask!"
+  //   );
+  // }
+  // var web3 = window.web3;
   const Arkius = require("../assets/abi/Arkius.json");
+  console.log(Arkius.abi);
   const contractAddress = web3.utils.toChecksumAddress(
     process.env.REACT_APP_CONTRACT_ADDRESS_TESTNET
   );
