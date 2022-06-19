@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ethers } from "ethers";
 import "./styles.css";
 import { getNft, transferNft } from './components/interact';
 import { Button } from 'react-bootstrap';
@@ -9,6 +10,7 @@ export default function App() {
   const [nftData, setNftData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const tempArray = [];
+  const [walletDate, setdata] = useState({address: "", Balance: null});
 
   useEffect(() => {
     getMintedNft();
@@ -40,8 +42,44 @@ export default function App() {
           }
         })
       }
-    }); 
-  }
+    });
+    
+    if (window.ethereum) {
+      window.ethereum.request({ method: "eth_requestAccounts" }).then((res) => accountChangeHandler(res[0]));
+      console.log("metamask");
+    } else {
+      alert("install metamask extension!");
+    }
+  };
+
+  // getbalance function for getting a balance in
+  // a right format with help of ethers
+  const getbalance = (address) => {
+  
+    // Requesting balance method
+    window.ethereum
+      .request({ 
+        method: "eth_getBalance", 
+        params: [address, "latest"] 
+      })
+      .then((balance) => {
+        // Setting balance
+        setdata({
+          Balance: ethers.utils.formatEther(balance),
+        });
+      });
+  };
+
+  // Function for getting handling all events
+  const accountChangeHandler = (account) => {
+    // Setting an address data
+    setdata({
+      address: account,
+    });
+  
+    // Setting a balance
+    getbalance(account);
+  };
 
   return (
     <div className="App p-5">
