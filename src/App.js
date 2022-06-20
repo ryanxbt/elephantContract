@@ -5,6 +5,7 @@ import { Button } from 'react-bootstrap';
 import Papa from "papaparse";
 
 export default function App() {
+  const [tokenId, setTokenId] = useState([]);
   const [csvData, setCsvData] = useState([]);
   const [nftData, setNftData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -16,23 +17,22 @@ export default function App() {
 
   const getMintedNft = async () => {
     // const res = await getNft();
-    console.log('aaaa')
     getNft().then(res => {
       setIsLoading(false);
       console.log('res - ', res);
       setNftData(res);
-    });    
+    });
   }
 
   const batchClick = () => {
     console.log('csvData - ', csvData);
     csvData.map((data) => {
-      if(data[1] !== undefined){
-        console.log(data[1]);
+      let subData = data.toString().split(",")
+      if (subData[1] !== undefined) {
         nftData.map((nft) => {
           // console.log('nft - ', nft);
-          if(nft.name === data[1]){
-            var selectedData = [data[0], nft.tokenID];
+          if (nft.name === subData[1]) {
+            var selectedData = [subData[0], nft.tokenID];
             // console.log('selectedData - ', selectedData);
             tempArray.push(selectedData);
             console.log('tempArray - ', tempArray);
@@ -40,7 +40,7 @@ export default function App() {
           }
         })
       }
-    }); 
+    });
   }
 
   return (
@@ -51,7 +51,7 @@ export default function App() {
             Loading ...
           </h2>
         </>
-      :
+        :
         <>
           <h2 className='text-center mb-5'>
             Please click batch process!
@@ -66,10 +66,12 @@ export default function App() {
                 if (files) {
                   // console.log(files[0]);
                   Papa.parse(files[0], {
-                    complete: function(results) {
-                      // console.log("Finished:", results.data);
+                    complete: function (results) {
+                      console.log("Finished:", results.data);
+
                       setCsvData(results.data);
-                    }}
+                    }
+                  }
                   )
                 }
               }}
@@ -79,7 +81,7 @@ export default function App() {
             </Button>
           </div>
         </>
-      }     
+      }
     </div>
   );
 }
