@@ -3,13 +3,13 @@ import StripeCheckout from "react-stripe-checkout";
 import axios from "axios";
 const stripeBtn = () => {
   const publishableKey = "pk_test_ZU3mlTy0q00DATc9EyF9A8jX";
-   
+
   const onToken = token => {
     const body = {
       amount: 999,
       token: token
-  };
-  axios
+    };
+    axios
       .post("http://localhost:8000/payment", body)
       .then(response => {
         console.log(response);
@@ -31,7 +31,7 @@ const stripeBtn = () => {
       stripeKey={publishableKey}
       image="https://www.vidhub.co" //Pop-in header image
       billingAddress={false}
-    />  
+    />
   );
 };
 export default stripeBtn;
