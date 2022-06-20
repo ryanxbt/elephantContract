@@ -53,7 +53,7 @@ export const getNft = async () => {
   }
 
   // console.log('nftList - ', nftList);
-
+  console.log("NFT list", nftList);
   return nftList;
 };
 

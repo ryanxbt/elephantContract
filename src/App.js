@@ -4,6 +4,7 @@ import "./styles.css";
 import { getNft, transferNft } from './components/interact';
 import { Button } from 'react-bootstrap';
 import Papa from "papaparse";
+import useMetaMask from './hooks/metamask';
 
 export default function App() {
   const [csvData, setCsvData] = useState([]);
@@ -11,6 +12,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const tempArray = [];
   const [walletDate, setdata] = useState({address: "", Balance: null});
+  // const { connect, disconnect, isActive, account, shouldDisable } = useMetaMask()
 
   useEffect(() => {
     getMintedNft();
@@ -31,7 +33,7 @@ export default function App() {
     csvData.map((data) => {
       if(data[1] !== undefined){
         console.log(data[1]);
-        nftData.map((nft) => {
+        nftData.map((nft) => {  
           // console.log('nft - ', nft);
           if(nft.name === data[1]){
             var selectedData = [data[0], nft.tokenID];
@@ -44,12 +46,12 @@ export default function App() {
       }
     });
     
-    if (window.ethereum) {
-      window.ethereum.request({ method: "eth_requestAccounts" }).then((res) => accountChangeHandler(res[0]));
-      console.log("metamask");
-    } else {
-      alert("install metamask extension!");
-    }
+    // if (window.ethereum) {
+    //   window.ethereum.request({ method: "eth_requestAccounts" }).then((res) => accountChangeHandler(res[0]));
+    //   console.log("metamask");
+    // } else {
+    //   alert("install metamask extension!");
+    // }
   };
 
   // getbalance function for getting a balance in
@@ -67,6 +69,7 @@ export default function App() {
         setdata({
           Balance: ethers.utils.formatEther(balance),
         });
+        console.log(address);
       });
   };
 
