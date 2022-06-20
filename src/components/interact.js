@@ -34,7 +34,7 @@ export const getNft = async () => {
   var nftItem = '';
 
   const nftsOfOwner = await contract.methods.walletOfOwner("0x791A6891cd4802200AA2cFfAc6770041B5ab643e").call()
-  for (let i = 1; i <= 29; i++) {
+  for (let i = 1; i <= nftsOfOwner.length; i++) {
     nftItem = await contract.methods.tokenURI(i).call();
     // console.log('nftItem - ', nftItem);
     const tokenID = getTokenID(nftItem);
