@@ -30,23 +30,20 @@ export const getNft = async () => {
   );
   const contract = new web3.eth.Contract(Arkius.abi, contractAddress);
 
-  const totalAmount = await contract.methods.totalToken().call();
-
   var nftList = [];
   var nftItem = '';
-  for (let i = 1; i <= totalAmount; i++) {
-    const ownerAddress = await contract.methods.ownerOf(i).call();
-    if (ownerAddress === "0x791A6891cd4802200AA2cFfAc6770041B5ab643e") {
-      nftItem = await contract.methods.tokenURI(i).call();
-      // console.log('nftItem - ', nftItem);
-      const tokenID = getTokenID(nftItem);
-      // console.log('tokenID - ', tokenID);
-      await axios.get(nftItem).then(res => {
-        res.data["tokenID"] = tokenID;
-        // console.log(res.data);
-        nftList.push(res.data);
-      });
-    }
+
+  const nftsOfOwner = await contract.methods.walletOfOwner("0x791A6891cd4802200AA2cFfAc6770041B5ab643e").call()
+  for (let i = 1; i <= nftsOfOwner.length; i++) {
+    nftItem = await contract.methods.tokenURI(i).call();
+    // console.log('nftItem - ', nftItem);
+    const tokenID = getTokenID(nftItem);
+    // console.log('tokenID - ', tokenID);
+    await axios.get(nftItem).then(res => {
+      res.data["tokenID"] = tokenID;
+      // console.log(res.data);
+      nftList.push(res.data);
+    });
   }
 
   // console.log('nftList - ', nftList);
